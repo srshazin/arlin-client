@@ -169,14 +169,16 @@ fun ServiceItem(
 fun PairInProgressIndicator(){
     Column(modifier =
     Modifier
-        .padding(20.dp, 0.dp)
+        .padding(30.dp, 0.dp)
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        LinearProgressIndicator()
-        Spacer(modifier = Modifier.height(7.dp))
+        LinearProgressIndicator(
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "Pairing in Progress",
+            text = "Pairing in Progress. On your device accept the pairing request to proceed.",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.labelSmall
             )
