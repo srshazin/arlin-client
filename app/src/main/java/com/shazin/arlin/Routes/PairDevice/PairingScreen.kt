@@ -74,11 +74,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                     onClick = {
                         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
                         // After connecting send an immediate pairing request
-                        connectionViewModel.sendMessage("""
-                            {
-                              "DeviceModel": ${Build.MODEL},
-                            }
-                        """.trimIndent())
+                        connectionViewModel.sendMessage("PAIR data={\"DeviceModel\": \"${Build.MODEL}\"}")
                     }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
