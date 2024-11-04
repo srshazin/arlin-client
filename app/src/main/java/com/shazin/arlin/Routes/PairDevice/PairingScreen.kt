@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.shazin.arlin.Models.ArlinServiceInfo
+import com.shazin.arlin.Models.PairingData
 import com.shazin.arlin.Models.RouteProps
 import com.shazin.arlin.R
 import com.shazin.arlin.ViewModels.ConnectionViewModel
@@ -46,6 +47,10 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
+    val pairingData =  Json.encodeToString(PairingData(
+        DeviceModel = Build.MODEL
+    ))
+
     var connectionViewModel = viewModel<ConnectionViewModel>()
     Scaffold(
         topBar = { TopAppBar(
