@@ -1,6 +1,8 @@
 package com.shazin.arlin.ViewModels
 
+import android.app.Application
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -8,7 +10,7 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 
-class ConnectionViewModel:ViewModel() {
+class ConnectionViewModel(application: Application):AndroidViewModel(application) {
     private val client = OkHttpClient()
     private var webSocket:WebSocket? = null
     val isConnectionInProgress = mutableStateOf(false)

@@ -43,7 +43,7 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
-    Log.d("XXX", "Service $service")
+    var connectionViewModel =
     Scaffold(
         topBar = { TopAppBar(
             title = {},
