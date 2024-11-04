@@ -1,6 +1,7 @@
 package com.shazin.arlin.Routes.PairDevice
 
 
+import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -73,7 +74,11 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                     onClick = {
                         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
                         // After connecting send an immediate pairing request
-                        connectionViewModel.sendMessage("PAIR")
+                        connectionViewModel.sendMessage("""
+                            {
+                              "DeviceModel": ${Build.MODEL},
+                            }
+                        """.trimIndent())
                     }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
