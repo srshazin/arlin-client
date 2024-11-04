@@ -10,15 +10,15 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 
-enum class PairingState {
-    
+enum class PairingRequestState {
+    ACCEPTED, REJECTED, UNSET
 }
 
 class ConnectionViewModel(application: Application):AndroidViewModel(application) {
     private val client = OkHttpClient()
     private var webSocket:WebSocket? = null
     val isPairing = mutableStateOf(false)
-    val pairingStatus
+    val pairingStatus= mutableStateOf(PairingRequestState.UNSET)
     fun connect(url: String) {
         val request = Request.Builder().url(url).build()
         webSocket = client.newWebSocket(request, WebSocketEventListener())
@@ -41,7 +41,12 @@ class ConnectionViewModel(application: Application):AndroidViewModel(application
             // Called when a message is received
             println("Received text message: $text")
             if (text == "PAIRING_ACCEPTED"){
-                set
+                pairingStatus.value = PairingRequestState.ACCEPTED
+                isPairing.value = false
+            }
+            else if (text == "PAIRING_REJECTED"){
+                pairingStatus.value = PairingRequestState.REJECTED
+                isPairing.value = false
             }
         }
 

@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -145,5 +147,19 @@ fun ServiceItem(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun PairInProgressIndicator(){
+    Box(modifier =
+        Modifier.padding(30.dp)
+
+    ){
+        LinearProgressIndicator()
+        Text(
+            text = "Pairing in Progress",
+            textAlign = TextAlign.Center
+            )
     }
 }
