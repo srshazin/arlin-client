@@ -160,9 +160,10 @@ fun ServiceItem(
 
 @Composable
 fun PairInProgressIndicator(){
-    Box(modifier =
-        Modifier.padding(30.dp)
-
+    Column(modifier =
+        Modifier.padding(30.dp, 10.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ){
         LinearProgressIndicator()
         Text(
