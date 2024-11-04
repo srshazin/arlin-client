@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.shazin.arlin"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.shazin.arlin"
