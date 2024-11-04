@@ -47,9 +47,10 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
-    val pairingData =  Json.encodeToString(PairingData(
+    val pairingData =  PairingData(
         DeviceModel = Build.MODEL
-    ))
+    )
+    val serializedPairingData = Json.encodeToString(PairingData.serializer(), pairingData)
 
     var connectionViewModel = viewModel<ConnectionViewModel>()
     Scaffold(
@@ -79,7 +80,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                     onClick = {
                         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
                         // After connecting send an immediate pairing request
-                        connectionViewModel.sendMessage("PAIR data={'DeviceModel': '${Build.MODEL}'}")
+                        connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
 //                        connectionViewModel.sendMessage("MOUSE button=LEFT")
                     }) {
                     Row(
