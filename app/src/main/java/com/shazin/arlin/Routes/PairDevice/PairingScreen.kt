@@ -3,6 +3,7 @@ package com.shazin.arlin.Routes.PairDevice
 
 import android.os.Build
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -82,11 +83,18 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                     modifier = Modifier.padding(18.dp, 0.dp)
                 )
                 ServiceItem(service = service)
+                AnimatedVisibility(
+                    visible = connectionViewModel.isPairing.value
+                ) {
+                    PairInProgressIndicator()
+                }
                 Button(
                     modifier = Modifier
                         .padding(18.dp, 0.dp)
                         .fillMaxWidth(),
+                    enabled = !connectionViewModel.isPairing.value,
                     onClick = {
+                        connectionViewModel.isPairing.value = true
                         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
                         // After connecting send an immediate pairing request
                         connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
