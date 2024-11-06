@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,6 +25,32 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
     val services: StateFlow<List<ArlinServiceInfo>> = _services
     private var discoveryJob: Job? = null
     init {
+        fun getDeviceInformation(): Map<String, String> {
+            return mapOf(
+                "Device Model" to Build.MODEL,
+                "Manufacturer" to Build.MANUFACTURER,
+                "Brand" to Build.BRAND,
+                "Device" to Build.DEVICE,
+                "Product" to Build.PRODUCT,
+                "Hardware" to Build.HARDWARE,
+                "Board" to Build.BOARD,
+                "Bootloader" to Build.BOOTLOADER,
+                "Display" to Build.DISPLAY,
+                "Fingerprint" to Build.FINGERPRINT,
+                "ID" to Build.ID,
+                "User" to Build.USER,
+                "Host" to Build.HOST,
+                "Type" to Build.TYPE,
+                "Version SDK" to Build.VERSION.SDK_INT.toString(),
+                "Version Release" to Build.VERSION.RELEASE,
+                "Version Codename" to Build.VERSION.CODENAME,
+                "Version Incremental" to Build.VERSION.INCREMENTAL
+            )
+        }
+        val deviceInfo = getDeviceInformation()
+        deviceInfo.forEach { (key, value) ->
+            println("$key: $value")
+        }
         startServiceDiscovery()
     }
 
