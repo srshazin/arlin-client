@@ -2,6 +2,7 @@ package com.shazin.arlin.Routes.PairDevice
 
 
 import android.os.Build
+import android.telecom.ConnectionRequest
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -187,4 +188,17 @@ fun PairInProgressIndicator(){
             style = MaterialTheme.typography.labelSmall
             )
     }
+}
+
+@Composable
+fun ConnectionRejectedMsg(){
+    Box(modifier = Modifier
+        .padding(15.dp)
+        .fillMaxWidth()
+    ){
+        Row {
+
+        }
+    }
+
 }
