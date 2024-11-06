@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.shazin.arlin.Core.AppStateHandler
 import com.shazin.arlin.Models.ArlinServiceInfo
 import com.shazin.arlin.Models.PairingData
 import com.shazin.arlin.Models.RouteProps
@@ -55,9 +56,11 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
+    val appStateHandler = AppStateHandler(routeProps.context)
     val pairingData =  PairingData(
         DeviceModel = Build.MODEL,
-        Brand = Build.BRAND
+        Brand = Build.BRAND,
+        DeviceID = appStateHandler.getDeviceID()
     )
     var pairingInProgress by remember {
         mutableStateOf(false)
