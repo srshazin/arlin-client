@@ -56,7 +56,8 @@ import kotlinx.serialization.json.Json
 @Composable
 fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
     val pairingData =  PairingData(
-        DeviceModel = Build.MODEL
+        DeviceModel = Build.MODEL,
+        Brand = Build.BRAND
     )
     var pairingInProgress by remember {
         mutableStateOf(false)

@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PairingData (
-    val DeviceModel: String
+    val DeviceModel: String,
+    val Brand: String
 )
