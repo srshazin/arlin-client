@@ -51,6 +51,7 @@ import com.shazin.arlin.Models.PairingData
 import com.shazin.arlin.Models.RouteProps
 import com.shazin.arlin.R
 import com.shazin.arlin.ViewModels.ConnectionViewModel
+import com.shazin.arlin.ViewModels.PairingRequestState
 import kotlinx.serialization.json.Json
 
 
@@ -89,7 +90,9 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                     modifier = Modifier.padding(18.dp, 0.dp)
                 )
                 ServiceItem(service = service)
-                ConnectionRejectedMsg(devIP = service.hostAddress)
+                AnimatedVisibility(visible = connectionViewModel.pairingStatus.value == PairingRequestState.REJECTED) {
+                    ConnectionRejectedMsg(devIP = service.hostAddress)
+                }
                 AnimatedVisibility(
                     visible = connectionViewModel.isPairing.value
                 ) {
@@ -195,16 +198,17 @@ fun PairInProgressIndicator(){
 fun ConnectionRejectedMsg(devIP: String){
     Box(modifier = Modifier
 
-        .padding(18.dp, 20.dp)
+        .padding(18.dp, 10.dp)
         .fillMaxWidth()
         .clip(RoundedCornerShape(15.dp))
-        .background(MaterialTheme.colorScheme.errorContainer)
+        .background(MaterialTheme.colorScheme.errorContainer.copy(0.7f))
 
     ){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
+                .padding(15.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_error_outline_24), contentDescription = "", tint = MaterialTheme.colorScheme.onErrorContainer)
             Spacer(modifier = Modifier.width(10.dp))
