@@ -2,12 +2,15 @@ package com.shazin.arlin.Routes.Home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.shazin.arlin.Core.AppStateHandler
 import com.shazin.arlin.Models.RouteProps
 
 
 @Composable
 fun Home(routeProps: RouteProps){
-
+    // initialize app state
+    val appState = AppStateHandler(routeProps.context)
+    appState.
     DeviceDiscovery(navHostController = routeProps.navHostController)
 
 }
