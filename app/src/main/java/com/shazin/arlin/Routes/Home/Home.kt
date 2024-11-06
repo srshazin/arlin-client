@@ -9,8 +9,7 @@ import com.shazin.arlin.Models.RouteProps
 @Composable
 fun Home(routeProps: RouteProps){
     // initialize app state
-    val appState = AppStateHandler(routeProps.context)
-    appState.
+    AppStateHandler(routeProps.context).initAppState()
     DeviceDiscovery(navHostController = routeProps.navHostController)
 
 }
