@@ -89,6 +89,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                     modifier = Modifier.padding(18.dp, 0.dp)
                 )
                 ServiceItem(service = service)
+                ConnectionRejectedMsg(devIP = service.hostAddress)
                 AnimatedVisibility(
                     visible = connectionViewModel.isPairing.value
                 ) {
@@ -191,13 +192,23 @@ fun PairInProgressIndicator(){
 }
 
 @Composable
-fun ConnectionRejectedMsg(){
+fun ConnectionRejectedMsg(devIP: String){
     Box(modifier = Modifier
-        .padding(15.dp)
-        .fillMaxWidth()
-    ){
-        Row {
 
+        .padding(18.dp, 20.dp)
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(15.dp))
+        .background(MaterialTheme.colorScheme.errorContainer)
+
+    ){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+        ) {
+            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_error_outline_24), contentDescription = "", tint = MaterialTheme.colorScheme.onErrorContainer)
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(text = "Connection Rejected by $devIP", color = MaterialTheme.colorScheme.onErrorContainer, style = MaterialTheme.typography.labelMedium)
         }
     }
 
