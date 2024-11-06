@@ -106,6 +106,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                             .padding(18.dp, 0.dp)
                             .fillMaxWidth(),
                         onClick = {
+                            connectionViewModel.pairingStatus.value = PairingRequestState.UNSET
                             connectionViewModel.isPairing.value = true
                             connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
                             // After connecting send an immediate pairing request
