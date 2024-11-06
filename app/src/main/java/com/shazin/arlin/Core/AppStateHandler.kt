@@ -18,5 +18,11 @@ class AppStateHandler(
             File(appStatePath).writeText(serializedAppState)
         }
     }
+    fun getDeviceID(): String{
+        // read the file
+        val jsonAppState = File(appStatePath).readText()
+        val appState = Json.decodeFromString<AppState>(jsonAppState)
+        return appState.deviceId
+    }
 
 }
