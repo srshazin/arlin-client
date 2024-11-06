@@ -65,37 +65,41 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
         }
     }
     private fun discoverServices() {
-        discoveryListener = object : NsdManager.DiscoveryListener {
-            override fun onDiscoveryStarted(serviceType: String) {
-                // Discovery started
-            }
+        if (discoveryListener == null) {
+            discoveryListener = object : NsdManager.DiscoveryListener {
+                override fun onDiscoveryStarted(serviceType: String) {
+                    // Discovery started
+                }
 
-            override fun onServiceFound(serviceInfo: NsdServiceInfo) {
-                // Resolve found services
-                resolveService(serviceInfo)
+                override fun onServiceFound(serviceInfo: NsdServiceInfo) {
+                    // Resolve found services
+                    resolveService(serviceInfo)
 
-            }
+                }
 
-            override fun onServiceLost(serviceInfo: NsdServiceInfo) {
+                override fun onServiceLost(serviceInfo: NsdServiceInfo) {
 //                Log.d("XXX", "Service ${serviceInfo} is lost")
-                    _services.value = _services.value.filter { it.hostAddress != decodeBase64EncodedIpAddress(serviceInfo.serviceName) }
+                    _services.value = _services.value.filter {
+                        it.hostAddress != decodeBase64EncodedIpAddress(serviceInfo.serviceName)
+                    }
 
+                }
+
+                override fun onDiscoveryStopped(serviceType: String) {
+                    // Discovery stopped
+                }
+
+                override fun onStartDiscoveryFailed(serviceType: String, errorCode: Int) {
+                    nsdManager.stopServiceDiscovery(this)
+                }
+
+                override fun onStopDiscoveryFailed(serviceType: String, errorCode: Int) {
+                    nsdManager.stopServiceDiscovery(this)
+                }
             }
 
-            override fun onDiscoveryStopped(serviceType: String) {
-                // Discovery stopped
-            }
-
-            override fun onStartDiscoveryFailed(serviceType: String, errorCode: Int) {
-                nsdManager.stopServiceDiscovery(this)
-            }
-
-            override fun onStopDiscoveryFailed(serviceType: String, errorCode: Int) {
-                nsdManager.stopServiceDiscovery(this)
-            }
+            nsdManager.discoverServices(serviceType, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
         }
-
-        nsdManager.discoverServices(serviceType, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
     }
     private fun resolveService(serviceInfo: NsdServiceInfo) {
         nsdManager.resolveService(serviceInfo, object : NsdManager.ResolveListener {
@@ -125,5 +129,8 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
     override fun onCleared() {
         super.onCleared()
         discoveryJob?.cancel()
+        discoveryListener?.let {
+            nsdManager.stopServiceDiscovery(it)
+        }
     }
 }
