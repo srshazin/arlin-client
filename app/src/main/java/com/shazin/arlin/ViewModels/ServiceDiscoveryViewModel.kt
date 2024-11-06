@@ -24,6 +24,8 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
     private val _services = MutableStateFlow<List<ArlinServiceInfo>>(emptyList())
     val services: StateFlow<List<ArlinServiceInfo>> = _services
     private var discoveryJob: Job? = null
+    private var discoveryListener: NsdManager.DiscoveryListener? = null
+
     init {
         fun getDeviceInformation(): Map<String, String> {
             return mapOf(
@@ -63,7 +65,7 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
         }
     }
     private fun discoverServices() {
-        val discoveryListener = object : NsdManager.DiscoveryListener {
+        discoveryListener = object : NsdManager.DiscoveryListener {
             override fun onDiscoveryStarted(serviceType: String) {
                 // Discovery started
             }
@@ -118,6 +120,7 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
             }
         })
     }
+
 
     override fun onCleared() {
         super.onCleared()
