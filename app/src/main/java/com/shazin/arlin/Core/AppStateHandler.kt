@@ -49,6 +49,11 @@ class AppStateHandler(
         val appState = Json.decodeFromString<AppState>(jsonAppState)
         return appState.pairedDevice
     }
+    fun AddPairedDevice(deviceInfo: ArlinPairedDeviceInfo){
+        val jsonAppState = File(appStatePath).readText()
+        val appState = Json.decodeFromString<AppState>(jsonAppState)
+        
+    }
 
 
 }
