@@ -49,8 +49,9 @@ class AppStateHandler(
         return appState.pairedDevice
     }
 
-    private fun _isDevicePaired(appState: AppState): Map<String, Boolean> {
-        fuync
+    private fun _isDevicePaired(deviceID: String): Map<String, Any> {
+        val pairedDevices = GetPairedDeviceList()
+        for 
     }
     fun AddPairedDevice(deviceInfo: ArlinPairedDeviceInfo){
         val jsonAppState = File(appStatePath).readText()
