@@ -49,7 +49,7 @@ class AppStateHandler(
         return appState.pairedDevice
     }
 
-    private fun _isDevicePaired(appState: AppState): Boolean {
+    private fun _isDevicePaired(appState: AppState): Map<String, Boolean> {
         fuync
     }
     fun AddPairedDevice(deviceInfo: ArlinPairedDeviceInfo){
