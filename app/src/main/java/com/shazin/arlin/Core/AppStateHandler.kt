@@ -23,8 +23,7 @@ class AppStateHandler(
             File(appStatePath).writeText(serializedAppState)
         }
     }
-    fun updateAppState(appState: AppState){
-
+    private fun setAppState(appState: AppState){
             // Serialize the app state
             val serializedAppState = Json.encodeToString(AppState.serializer(), appState)
             File(appStatePath).writeText(serializedAppState)
@@ -49,10 +48,14 @@ class AppStateHandler(
         val appState = Json.decodeFromString<AppState>(jsonAppState)
         return appState.pairedDevice
     }
+
+    private fun _isDevicePaired(appState: AppState): Boolean {
+        fuync
+    }
     fun AddPairedDevice(deviceInfo: ArlinPairedDeviceInfo){
         val jsonAppState = File(appStatePath).readText()
         val appState = Json.decodeFromString<AppState>(jsonAppState)
-        
+
     }
 
 
