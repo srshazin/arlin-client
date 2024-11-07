@@ -6,6 +6,8 @@ import com.shazin.arlin.Models.ArlinPairedDeviceInfo
 import com.shazin.arlin.Utils.generateRandomDeviceID
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.util.Date
+
 
 class AppStateHandler(
     val context: Context
@@ -50,12 +52,42 @@ class AppStateHandler(
     }
 
     private fun _isDevicePaired(deviceID: String): Map<String, Any> {
+
         val pairedDevices = GetPairedDeviceList()
-        for 
+        if (pairedDevices == null){
+            return mapOf(
+                "paired" to false,
+                "pairingIndex" to -1
+            )
+        }
+        pairedDevices.forEachIndexed{index, arlinPairedDeviceInfo ->
+            if (arlinPairedDeviceInfo.deviceID == deviceID){
+                return mapOf(
+                    "paired" to true,
+                    "pairingIndex" to index
+                )
+            }
+        }
+        return mapOf(
+            "paired" to false,
+            "pairingIndex" to -1
+        )
     }
     fun AddPairedDevice(deviceInfo: ArlinPairedDeviceInfo){
         val jsonAppState = File(appStatePath).readText()
         val appState = Json.decodeFromString<AppState>(jsonAppState)
+        val pairingState = _isDevicePaired(deviceInfo.deviceID)
+        if (!(pairingState.get("paired") as Boolean)){
+            val pairedDevices_ = appState.pairedDevice?.toMutableList()
+            pairedDevices_?.add(deviceInfo)
+            // set the app state
+            setAppState(AppState(
+                deviceId = appState.deviceId,
+                pairedDevice = pairedDevices_,
+                lastConnected = Date().time
+            ))
+        }
+
 
     }
 
