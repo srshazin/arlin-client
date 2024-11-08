@@ -1,6 +1,7 @@
 package com.shazin.arlin.Core
 
 import android.content.Context
+import android.util.Log
 import com.shazin.arlin.Models.AppState
 import com.shazin.arlin.Models.ArlinPairedDeviceInfo
 import com.shazin.arlin.Utils.generateRandomDeviceID
@@ -80,6 +81,7 @@ class AppStateHandler(
         if (!(pairingState.get("paired") as Boolean)){
             val pairedDevices_ = appState.pairedDevice?.toMutableList()
             pairedDevices_?.add(deviceInfo)
+            Log.d("XXX", "Paired dev added $pairedDevices_")
             // set the app state
             setAppState(AppState(
                 deviceId = appState.deviceId,
