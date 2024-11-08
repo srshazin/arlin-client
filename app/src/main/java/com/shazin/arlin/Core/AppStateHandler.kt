@@ -79,8 +79,9 @@ class AppStateHandler(
         val appState = Json.decodeFromString<AppState>(jsonAppState)
         val pairingState = _isDevicePaired(deviceInfo.deviceID)
         if (!(pairingState.get("paired") as Boolean)){
-            val pairedDevices_ = appState.pairedDevice?.toMutableList()
-            pairedDevices_?.add(deviceInfo)
+            val pairedDevices_ = if (appState.pairedDevice.isNullOrEmpty()) mutableListOf<ArlinPairedDeviceInfo>() else appState.pairedDevice.toMutableList()
+            Log.d("XXX", "Old paired devs $pairedDevices_")
+            pairedDevices_.add(deviceInfo)
             Log.d("XXX", "Paired dev added $pairedDevices_")
             // set the app state
             setAppState(AppState(
