@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,7 +79,16 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
             hostAddress = "192.168.1.1",
             port = 8000
         ))
+
+        routeProps.navHostController.navigate("control")
     }
+
+    LaunchedEffect(key1 = true) {
+        if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED){
+            handlePairing()
+        }
+    }
+
     Scaffold(
         topBar = { TopAppBar(
             title = {},
