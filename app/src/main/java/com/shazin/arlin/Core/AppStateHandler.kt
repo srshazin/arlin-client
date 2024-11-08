@@ -73,7 +73,7 @@ class AppStateHandler(
             "pairingIndex" to -1
         )
     }
-    fun AddPairedDevice(deviceInfo: ArlinPairedDeviceInfo){
+    fun addPairedDevice(deviceInfo: ArlinPairedDeviceInfo){
         val jsonAppState = File(appStatePath).readText()
         val appState = Json.decodeFromString<AppState>(jsonAppState)
         val pairingState = _isDevicePaired(deviceInfo.deviceID)
@@ -88,7 +88,16 @@ class AppStateHandler(
             ))
         }
 
+    }
 
+    fun unpairDevice(deviceID: String){
+        val jsonAppState = File(appStatePath).readText()
+        val appState = Json.decodeFromString<AppState>(jsonAppState)
+        val pairingState = _isDevicePaired(deviceID)
+        if (pairingState.get("paired") as Boolean){
+            val pairedDeviceList = appState.pairedDevice?.toMutableList()
+            pairedDeviceList?.removeAt(pairingState.get("pairingIndex") as Int)
+        }
     }
 
 
