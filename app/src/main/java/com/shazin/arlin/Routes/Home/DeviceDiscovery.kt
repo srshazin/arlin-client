@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.shazin.arlin.Models.ArlinServiceInfo
 import com.shazin.arlin.R
+import com.shazin.arlin.ViewModels.ConnectionViewModel
 import com.shazin.arlin.ViewModels.ServiceDiscoveryViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -54,6 +55,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun DeviceDiscovery(navHostController: NavHostController){
     val serviceDiscoveryViewModel = viewModel<ServiceDiscoveryViewModel>()
+    val connectionViewModel = viewModel<ConnectionViewModel>()
     val services = serviceDiscoveryViewModel.services.collectAsState()
     val pullToRefreshState = rememberPullToRefreshState()
     var isRefreshing by remember {
@@ -78,18 +80,18 @@ fun DeviceDiscovery(navHostController: NavHostController){
                 }
             }
         ){
-                ListServices(servers = services.value, navHostController = navHostController)
+                ListServices(servers = services.value, navHostController = navHostController, connectionViewModel=connectionViewModel)
         }
     }
 }
 
 @Composable
-fun ListServices(servers: List<ArlinServiceInfo>, navHostController: NavHostController){
+fun ListServices(servers: List<ArlinServiceInfo>, navHostController: NavHostController, connectionViewModel: ConnectionViewModel){
     if (servers.size == 0){
         NoServiceFound()
     }else {
         LazyColumn {
-            items(servers){ service -> ServiceItem(service = service, navHostController, clickable = true)}
+            items(servers){ service -> ServiceItem(service = service, connectionViewModel=connectionViewModel, navHostController, clickable = true)}
         }
     }
 }
@@ -98,11 +100,15 @@ fun ListServices(servers: List<ArlinServiceInfo>, navHostController: NavHostCont
 @Composable
 fun ServiceItem(
         service: ArlinServiceInfo,
+        connectionViewModel: ConnectionViewModel,
         navHostController: NavHostController,
         background: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
         clickable: Boolean = false
     ){
-
+    fun handleDeviceConnection(){
+        // first connect to the device
+        
+    }
     val serializedService = Json.encodeToString(ArlinServiceInfo.serializer(), service)
     Box(modifier = Modifier
 
