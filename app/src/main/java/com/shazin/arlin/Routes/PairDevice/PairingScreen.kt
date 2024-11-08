@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.shazin.arlin.Core.AppStateHandler
+import com.shazin.arlin.Models.ArlinPairedDeviceInfo
 import com.shazin.arlin.Models.ArlinServiceInfo
 import com.shazin.arlin.Models.PairingData
 import com.shazin.arlin.Models.RouteProps
@@ -68,8 +69,16 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
         mutableStateOf(false)
     }
     val serializedPairingData = Json.encodeToString(PairingData.serializer(), pairingData)
-
     var connectionViewModel = viewModel<ConnectionViewModel>()
+    fun handlePairing(){
+        // first save the device info
+        appStateHandler.addPairedDevice(ArlinPairedDeviceInfo(
+            deviceID = "XXXXX",
+            hostName = "linux",
+            hostAddress = "192.168.1.1",
+            port = 8000
+        ))
+    }
     Scaffold(
         topBar = { TopAppBar(
             title = {},
