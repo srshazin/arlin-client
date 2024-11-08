@@ -20,6 +20,7 @@ class ConnectionViewModel(application: Application):AndroidViewModel(application
     private var webSocket:WebSocket? = null
     val isPairing = mutableStateOf(false)
     val pairingStatus= mutableStateOf(PairingRequestState.UNSET)
+    val deviceInfoString  = mutableStateOf("")
     private var onReplyCallback: ((String) -> Unit)? = null
     fun connect(url: String) {
         val request = Request.Builder().url(url).build()
