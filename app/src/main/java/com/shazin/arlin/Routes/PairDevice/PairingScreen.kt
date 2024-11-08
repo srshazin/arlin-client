@@ -73,9 +73,9 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
     var connectionViewModel = viewModel<ConnectionViewModel>()
     fun handlePairing(){
         // first send a INQ message to inquire information about the server
-        connectionViewModel.sendMessageWithReply("INQ"){reply->
-            Log.d("XXX", "SERVER RESPONSE $reply")
-        }
+//        connectionViewModel.sendMessageWithReply("INQ"){reply->
+//            Log.d("XXX", "SERVER RESPONSE $reply")
+//        }
         // first save the device info
         appStateHandler.addPairedDevice(ArlinPairedDeviceInfo(
             deviceID = "XXXXX",
@@ -133,8 +133,8 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                             connectionViewModel.isPairing.value = true
                             connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
                             // After connecting send an immediate pairing request
-                            connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
-//                            connectionViewModel.sendMessage("INQ deviceID=${appStateHandler.getDeviceID()}")
+//                            connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
+                            connectionViewModel.sendMessage("INQ deviceID=${appStateHandler.getDeviceID()}")
                         }) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
