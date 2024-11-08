@@ -72,17 +72,10 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
     val serializedPairingData = Json.encodeToString(PairingData.serializer(), pairingData)
     var connectionViewModel = viewModel<ConnectionViewModel>()
     fun handlePairing(){
-        connectionViewModel.pairingStatus.value = PairingRequestState.UNSET
-        connectionViewModel.isPairing.value = true
-        connectionViewModel.connect("ws://${service?.hostAddress}:${service?.port}/ws")
-        // After connecting send an immediate pairing request
-        connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
-        if (connectionViewModel.pairingStatus.value ==  PairingRequestState.ACCEPTED){
-            connectionViewModel.sendMessageWithReply("INQ"){rep->
-                Log.d("XXX", "SERVER RESPONSE $rep")
-            }
+        // first send a INQ message to inquire information about the server
+        connectionViewModel.sendMessageWithReply("INQ deviceID=${appStateHandler.getDeviceID()}"){reply->
+            Log.d("XXX", "SERVER RESPONSE $reply")
         }
-
         // first save the device info
         appStateHandler.addPairedDevice(ArlinPairedDeviceInfo(
             deviceID = "XXXXX",
@@ -91,9 +84,14 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
             port = 8000
         ))
 
-//        routeProps.navHostController.navigate("control")
+        routeProps.navHostController.navigate("control")
     }
+    if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED){
+        handlePairing()
+    }
+    LaunchedEffect(key1 = true) {
 
+    }
 
     Scaffold(
         topBar = { TopAppBar(
@@ -130,8 +128,14 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                         modifier = Modifier
                             .padding(18.dp, 0.dp)
                             .fillMaxWidth(),
-                        onClick = {handlePairing()}
-                    ) {
+                        onClick = {
+                            connectionViewModel.pairingStatus.value = PairingRequestState.UNSET
+                            connectionViewModel.isPairing.value = true
+                            connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
+                            // After connecting send an immediate pairing request
+                            connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
+//                            connectionViewModel.sendMessage("INQ deviceID=${appStateHandler.getDeviceID()}")
+                        }) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
