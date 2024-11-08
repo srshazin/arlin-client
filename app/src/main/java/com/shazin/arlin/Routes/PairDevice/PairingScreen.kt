@@ -74,9 +74,15 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
     fun handlePairing(){
         // first send a INQ message to inquire information about the server
         connectionViewModel.sendMessageWithReply("INQ deviceID=${appStateHandler.getDeviceID()}"){reply->
-           val pairingDeviceInfo = Json.decodeFromString<ArlinPairedDeviceInfo>(reply)
-            appStateHandler.addPairedDevice(pairingDeviceInfo)
-            routeProps.navHostController.navigate("control/${Json.encodeToString(ArlinPairedDeviceInfo.serializer(), pairingDeviceInfo)}")
+           try {
+               val pairingDeviceInfo = Json.decodeFromString<ArlinPairedDeviceInfo>(reply)
+               appStateHandler.addPairedDevice(pairingDeviceInfo)
+               routeProps.navHostController.navigate("control/${reply}")
+           }
+           catch (e: Exception){
+               connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
+               e.printStackTrace()
+           }
         }
     }
     if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED){
