@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CompletableDeferred
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -19,6 +20,7 @@ class ConnectionViewModel(application: Application):AndroidViewModel(application
     private var webSocket:WebSocket? = null
     val isPairing = mutableStateOf(false)
     val pairingStatus= mutableStateOf(PairingRequestState.UNSET)
+    private var deferredReply: CompletableDeferred<String>? = null
     fun connect(url: String) {
         val request = Request.Builder().url(url).build()
         webSocket = client.newWebSocket(request, WebSocketEventListener())
@@ -27,9 +29,19 @@ class ConnectionViewModel(application: Application):AndroidViewModel(application
         webSocket?.send(message)
     }
 
+
     fun close() {
         webSocket?.close(1000, "Closing connection")
     }
+
+    suspend fun sendMessageWithReply(message: String): String {
+        deferredReply = CompletableDeferred()
+        webSocket?.send(message)
+
+        // Wait for the reply asynchronously
+        return deferredReply?.await() ?: throw Exception("No reply received")
+    }
+
     private inner class WebSocketEventListener : WebSocketListener() {
 
         override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
