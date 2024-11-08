@@ -133,8 +133,8 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                             connectionViewModel.isPairing.value = true
                             connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
                             // After connecting send an immediate pairing request
-//                            connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
-                            connectionViewModel.sendMessage("INQ deviceID=${appStateHandler.getDeviceID()}")
+                            connectionViewModel.sendMessage("PAIR data=$serializedPairingData")
+//                            connectionViewModel.sendMessage("INQ deviceID=${appStateHandler.getDeviceID()}")
                         }) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
