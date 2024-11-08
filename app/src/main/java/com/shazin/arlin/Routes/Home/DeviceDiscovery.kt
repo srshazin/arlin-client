@@ -114,7 +114,19 @@ fun ServiceItem(
         // first connect to the device
         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
         // After connecting send an immediate pairing request
-        connectionViewModel.sendMessage("CONNECT deviceID=${appStateHandler.getDeviceID()}")
+        connectionViewModel.sendMessageWithReply("CONNECT deviceID=${appStateHandler.getDeviceID()}"){reply->
+            if (reply == "OK"){
+                connectionViewModel.sendMessageWithReply("INQ deviceID=${appStateHandler.getDeviceID()}"){devInfoString->
+                    try {
+                        
+                    }
+                    catch (e: Exception){
+                        // something went wrong
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
     }
     val serializedService = Json.encodeToString(ArlinServiceInfo.serializer(), service)
     Box(modifier = Modifier
