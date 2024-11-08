@@ -41,7 +41,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.shazin.arlin.Core.AppStateHandler
 import com.shazin.arlin.Models.ArlinServiceInfo
+import com.shazin.arlin.Models.RouteProps
 import com.shazin.arlin.R
 import com.shazin.arlin.ViewModels.ConnectionViewModel
 import com.shazin.arlin.ViewModels.ServiceDiscoveryViewModel
@@ -53,7 +55,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeviceDiscovery(navHostController: NavHostController){
+fun DeviceDiscovery(routeProps: RouteProps){
     val serviceDiscoveryViewModel = viewModel<ServiceDiscoveryViewModel>()
     val connectionViewModel = viewModel<ConnectionViewModel>()
     val services = serviceDiscoveryViewModel.services.collectAsState()
@@ -80,18 +82,18 @@ fun DeviceDiscovery(navHostController: NavHostController){
                 }
             }
         ){
-                ListServices(servers = services.value, navHostController = navHostController, connectionViewModel=connectionViewModel)
+                ListServices(servers = services.value, routeProps = routeProps, connectionViewModel=connectionViewModel)
         }
     }
 }
 
 @Composable
-fun ListServices(servers: List<ArlinServiceInfo>, navHostController: NavHostController, connectionViewModel: ConnectionViewModel){
+fun ListServices(servers: List<ArlinServiceInfo>, routeProps: RouteProps, connectionViewModel: ConnectionViewModel){
     if (servers.size == 0){
         NoServiceFound()
     }else {
         LazyColumn {
-            items(servers){ service -> ServiceItem(service = service, connectionViewModel=connectionViewModel, navHostController, clickable = true)}
+            items(servers){ service -> ServiceItem(service = service, connectionViewModel=connectionViewModel, routeProps, clickable = true)}
         }
     }
 }
@@ -101,13 +103,18 @@ fun ListServices(servers: List<ArlinServiceInfo>, navHostController: NavHostCont
 fun ServiceItem(
         service: ArlinServiceInfo,
         connectionViewModel: ConnectionViewModel,
-        navHostController: NavHostController,
+        routeProps: RouteProps,
         background: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
         clickable: Boolean = false
     ){
+
+    val appStateHandler = AppStateHandler(routeProps.context)
+
     fun handleDeviceConnection(){
         // first connect to the device
-        
+        connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
+        // After connecting send an immediate pairing request
+        connectionViewModel.sendMessage("CONNECT deviceID=${appStateHandler.getDeviceID()}")
     }
     val serializedService = Json.encodeToString(ArlinServiceInfo.serializer(), service)
     Box(modifier = Modifier
@@ -117,7 +124,7 @@ fun ServiceItem(
         .clip(RoundedCornerShape(25.dp))
         .background(background)
         .clickable(clickable, onClick = {
-            navHostController.navigate("/pair_dev/${serializedService}")
+            routeProps.navHostController.navigate("/pair_dev/${serializedService}")
         })
 
     ){

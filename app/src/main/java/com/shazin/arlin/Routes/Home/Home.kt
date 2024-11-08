@@ -10,15 +10,7 @@ import com.shazin.arlin.Models.RouteProps
 fun Home(routeProps: RouteProps){
     // initialize app state
     AppStateHandler(routeProps.context).initAppState()
-    DeviceDiscovery(navHostController = routeProps.navHostController)
+    DeviceDiscovery(routeProps = routeProps)
 
 }
 
-@Composable
-fun ServiceList(services: List<String>) {
-    Column {
-        services.forEach { service ->
-            Text(text = service)
-        }
-    }
-}
