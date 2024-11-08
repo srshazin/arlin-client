@@ -82,11 +82,11 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
 
         routeProps.navHostController.navigate("control")
     }
-
+    if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED){
+        handlePairing()
+    }
     LaunchedEffect(key1 = true) {
-        if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED){
-            handlePairing()
-        }
+
     }
 
     Scaffold(
