@@ -7,5 +7,5 @@ import com.shazin.arlin.Models.RouteProps
 @Composable
 fun ControlScreen(routeProps: RouteProps){
     Text(text = "Hello from control hub")
-    
+
 }
