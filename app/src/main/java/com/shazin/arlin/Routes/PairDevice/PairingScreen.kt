@@ -72,6 +72,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
     val serializedPairingData = Json.encodeToString(PairingData.serializer(), pairingData)
     var connectionViewModel = viewModel<ConnectionViewModel>()
     fun handlePairing(){
+        // first send a INQ message to 
         // first save the device info
         appStateHandler.addPairedDevice(ArlinPairedDeviceInfo(
             deviceID = "XXXXX",
