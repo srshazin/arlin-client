@@ -25,7 +25,10 @@ fun ControlScreen(routeProps: RouteProps, deviceInfo: ArlinPairedDeviceInfo?){
                 TopAppBar(
                     title = { Text(text = deviceInfo.hostName) },
                     navigationIcon = {
-                        IconButton(onClick = { routeProps.navHostController.popBackStack() }) {
+                        IconButton(onClick = {
+//                            routeProps.navHostController.popBackStack()
+                            routeProps.navHostController.navigate("home")
+                        }) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_24),
                                 contentDescription = ""
