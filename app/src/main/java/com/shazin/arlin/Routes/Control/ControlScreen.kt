@@ -18,24 +18,33 @@ import com.shazin.arlin.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ControlScreen(routeProps: RouteProps, deviceInfo: ArlinPairedDeviceInfo){
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {Text(text = deviceInfo.hostName)},
-                navigationIcon = {
-                    IconButton(onClick = { routeProps.navHostController.popBackStack() }) {
-                        Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_24), contentDescription = "")
+fun ControlScreen(routeProps: RouteProps, deviceInfo: ArlinPairedDeviceInfo?){
+    if (deviceInfo != null) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = deviceInfo.hostName) },
+                    navigationIcon = {
+                        IconButton(onClick = { routeProps.navHostController.popBackStack() }) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_24),
+                                contentDescription = ""
+                            )
+                        }
                     }
-                }
-            )
-        }
-    ) {paddingValues ->
-        Box(modifier = Modifier
-            .padding(paddingValues)
-        ){
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .padding(paddingValues)
+            ) {
 
+            }
         }
+    }
+    else {
+        Text(text = "Invalid device")
     }
 
 }

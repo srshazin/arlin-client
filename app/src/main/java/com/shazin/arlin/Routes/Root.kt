@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.shazin.arlin.Models.ArlinPairedDeviceInfo
 import com.shazin.arlin.Models.ArlinServiceInfo
 import com.shazin.arlin.Models.RouteProps
 import com.shazin.arlin.Routes.Control.ControlScreen
@@ -29,8 +30,10 @@ fun ApplicationRoot(routeProps: RouteProps){
                 val service = if (service_.isNullOrEmpty()) null else Json.decodeFromString<ArlinServiceInfo>(service_)
                     DeviceParingScreen(routeProps = routeProps, service = service)
             }
-            composable(route="control"){
-                ControlScreen(routeProps = routeProps)
+            composable(route="control/{deviceInfo}"){
+                val deviceInfo_ = currentBackStackEntry?.arguments?.getString("deviceInfo")
+                val deviceInfo = if (deviceInfo_.isNullOrEmpty()) null else Json.decodeFromString<ArlinPairedDeviceInfo>(deviceInfo_)
+                ControlScreen(routeProps = routeProps, deviceInfo= deviceInfo)
             }
         }
     }
