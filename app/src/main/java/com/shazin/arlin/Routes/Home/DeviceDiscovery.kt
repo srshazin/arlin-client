@@ -125,6 +125,7 @@ fun ServiceItem(
             controllerScreenData = ""
         }
     }
+    val serializedService = Json.encodeToString(ArlinServiceInfo.serializer(), service)
     fun handleDeviceConnection(){
         // first connect to the device
         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
@@ -140,10 +141,12 @@ fun ServiceItem(
                         e.printStackTrace()
                     }
                 }
+            }else {
+                routeProps.navHostController.navigate("/pair_dev/${serializedService}")
             }
         }
     }
-    val serializedService = Json.encodeToString(ArlinServiceInfo.serializer(), service)
+
     Box(modifier = Modifier
 
         .padding(18.dp, 20.dp)
@@ -151,7 +154,7 @@ fun ServiceItem(
         .clip(RoundedCornerShape(25.dp))
         .background(background)
         .clickable(clickable, onClick = {
-            routeProps.navHostController.navigate("/pair_dev/${serializedService}")
+
         })
 
     ){
