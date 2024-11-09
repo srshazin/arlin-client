@@ -42,10 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.shazin.arlin.Core.AppStateHandler
+import com.shazin.arlin.Models.ArlinPairedDeviceInfo
 import com.shazin.arlin.Models.ArlinServiceInfo
 import com.shazin.arlin.Models.RouteProps
 import com.shazin.arlin.R
 import com.shazin.arlin.ViewModels.ConnectionViewModel
+import com.shazin.arlin.ViewModels.PairingRequestState
 import com.shazin.arlin.ViewModels.ServiceDiscoveryViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -109,7 +111,20 @@ fun ServiceItem(
     ){
 
     val appStateHandler = AppStateHandler(routeProps.context)
-
+    var controllerScreenData by remember {
+        mutableStateOf("")
+    }
+    // check if device info is available then naviagte to control screen
+    if ( controllerScreenData.length>0){
+        try {
+            Json.decodeFromString<ArlinPairedDeviceInfo>(controllerScreenData)
+            routeProps.navHostController.navigate("control/${controllerScreenData}")
+        }
+        catch(e:Exception) {
+            e.printStackTrace()
+            controllerScreenData = ""
+        }
+    }
     fun handleDeviceConnection(){
         // first connect to the device
         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
@@ -118,7 +133,7 @@ fun ServiceItem(
             if (reply == "OK"){
                 connectionViewModel.sendMessageWithReply("INQ deviceID=${appStateHandler.getDeviceID()}"){devInfoString->
                     try {
-                        
+                        controllerScreenData = devInfoString
                     }
                     catch (e: Exception){
                         // something went wrong
