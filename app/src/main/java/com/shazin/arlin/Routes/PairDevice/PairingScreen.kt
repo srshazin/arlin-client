@@ -69,9 +69,6 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
     val pairingDeviceInfo = remember {
         mutableStateOf<ArlinPairedDeviceInfo?>(null)
     }
-    var pairingInProgress by remember {
-        mutableStateOf(false)
-    }
     val serializedPairingData = Json.encodeToString(PairingData.serializer(), pairingData)
     var connectionViewModel = viewModel<ConnectionViewModel>()
     fun handlePairing() {
