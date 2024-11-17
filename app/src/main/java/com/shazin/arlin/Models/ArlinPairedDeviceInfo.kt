@@ -8,4 +8,5 @@ data class  ArlinPairedDeviceInfo(
     val hostName: String,
     val hostAddress: String,
     val port: Int,
+    val justPaired: Boolean = false // for pairing screen navigation
 )
