@@ -20,8 +20,9 @@ class ConnectionViewModel(application: Application):AndroidViewModel(application
     private var webSocket:WebSocket? = null
     val isPairing = mutableStateOf(false)
     val pairingStatus= mutableStateOf(PairingRequestState.UNSET)
-    val deviceInfoString  = mutableStateOf("")
+
     private var onReplyCallback: ((String) -> Unit)? = null
+    val connClosed = mutableStateOf(false)
     fun connect(url: String) {
         val request = Request.Builder().url(url).build()
         webSocket = client.newWebSocket(request, WebSocketEventListener())
@@ -77,13 +78,15 @@ class ConnectionViewModel(application: Application):AndroidViewModel(application
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             // Called when connection has been closed
             println("WebSocket closed: $code / $reason")
+            connClosed.value = true
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: okhttp3.Response?) {
-            onReplyCallback?.invoke("Error: ${t.message}")
+//            onReplyCallback?.invoke("Error: ${t.message}")
             onReplyCallback = null // Clear callback after failure
             // Called when connection fails
             println("WebSocket error: ${t.message}")
+            connClosed.value = true
         }
     }
 

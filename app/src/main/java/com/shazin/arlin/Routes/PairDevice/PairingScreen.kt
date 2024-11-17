@@ -59,60 +59,64 @@ import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
+fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
     val appStateHandler = AppStateHandler(routeProps.context)
-    val pairingData =  PairingData(
+    val pairingData = PairingData(
         DeviceModel = Build.MODEL,
         Brand = Build.BRAND,
         DeviceID = appStateHandler.getDeviceID()
     )
+    val pairingDeviceInfo = remember {
+        mutableStateOf<ArlinPairedDeviceInfo?>(null)
+    }
     var pairingInProgress by remember {
         mutableStateOf(false)
     }
     val serializedPairingData = Json.encodeToString(PairingData.serializer(), pairingData)
     var connectionViewModel = viewModel<ConnectionViewModel>()
-    fun handlePairing(){
+    fun handlePairing() {
         // first send a INQ message to inquire information about the server
-        connectionViewModel.sendMessageWithReply("INQ deviceID=${appStateHandler.getDeviceID()}"){reply->
-           try {
-               val pairingDeviceInfo = Json.decodeFromString<ArlinPairedDeviceInfo>(reply)
-               appStateHandler.addPairedDevice(pairingDeviceInfo)
-               connectionViewModel.deviceInfoString.value = reply
-           }
-           catch (e: Exception){
-               connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
-               e.printStackTrace()
-           }
+        connectionViewModel.sendMessageWithReply("INQ deviceID=${appStateHandler.getDeviceID()}") { pairingDeviceInq ->
+            try {
+                val pairingDeviceInfo_ =
+                    Json.decodeFromString<ArlinPairedDeviceInfo>(pairingDeviceInq)
+                appStateHandler.addPairedDevice(pairingDeviceInfo_)
+                pairingDeviceInfo.value = pairingDeviceInfo_
+            } catch (e: Exception) {
+                connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
+                e.printStackTrace()
+            }
         }
     }
-    if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED){
+    if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED) {
         handlePairing()
     }
     // check if device info is available then naviagte to control screen
-    if (connectionViewModel.deviceInfoString.value.trim().length >0){
-        try {
-            Json.decodeFromString<ArlinPairedDeviceInfo>(connectionViewModel.deviceInfoString.value)
-            routeProps.navHostController.navigate("control/${connectionViewModel.deviceInfoString.value}")
-        }
-        catch(e:Exception) {
-            connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
-        }
+    if (pairingDeviceInfo.value != null) {
+        routeProps.navHostController.navigate(pairingDeviceInfo)
     }
 
     Scaffold(
-        topBar = { TopAppBar(
-            title = {},
-            navigationIcon = {
-                IconButton(onClick = { routeProps.navHostController.popBackStack() }) {
-                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_24), contentDescription = "back arrow")
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = { routeProps.navHostController.popBackStack() }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_back_24),
+                            contentDescription = "back arrow"
+                        )
+                    }
                 }
-            }
-        )}
-    ) {paddingValues ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)){
-            if (service != null){
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            if (service != null) {
                 Text(
                     text = "Pairing with",
                     style = MaterialTheme.typography.displaySmall,
@@ -153,8 +157,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 Text(text = "Invalid service")
             }
 
@@ -165,13 +168,14 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?){
 @Composable
 fun ServiceItem(
     service: ArlinServiceInfo,
-){
-    Box(modifier = Modifier
+) {
+    Box(
+        modifier = Modifier
 
-        .padding(18.dp, 20.dp)
-        .fillMaxWidth()
+            .padding(18.dp, 20.dp)
+            .fillMaxWidth()
 
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +185,10 @@ fun ServiceItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                Image(imageVector = ImageVector.vectorResource(id = R.drawable.computer), contentDescription = "Computer icon")
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.computer),
+                    contentDescription = "Computer icon"
+                )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
                     // Device host Name
@@ -204,13 +211,14 @@ fun ServiceItem(
 }
 
 @Composable
-fun PairInProgressIndicator(){
-    Column(modifier =
-    Modifier
-        .padding(30.dp, 0.dp)
-        .fillMaxWidth(),
+fun PairInProgressIndicator() {
+    Column(
+        modifier =
+        Modifier
+            .padding(30.dp, 0.dp)
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-    ){
+    ) {
         LinearProgressIndicator(
             modifier = Modifier.fillMaxWidth()
         )
@@ -219,29 +227,38 @@ fun PairInProgressIndicator(){
             text = "Pairing in Progress. On your device accept the pairing request to proceed.",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.labelSmall
-            )
+        )
     }
 }
 
 @Composable
-fun ConnectionRejectedMsg(devIP: String){
-    Box(modifier = Modifier
+fun ConnectionRejectedMsg(devIP: String) {
+    Box(
+        modifier = Modifier
 
-        .padding(18.dp, 10.dp)
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(15.dp))
-        .background(MaterialTheme.colorScheme.errorContainer.copy(0.7f))
+            .padding(18.dp, 10.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(15.dp))
+            .background(MaterialTheme.colorScheme.errorContainer.copy(0.7f))
 
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_error_outline_24), contentDescription = "", tint = MaterialTheme.colorScheme.onErrorContainer)
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.baseline_error_outline_24),
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.onErrorContainer
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            Text(text = "Connection Rejected by $devIP", color = MaterialTheme.colorScheme.onErrorContainer, style = MaterialTheme.typography.labelMedium)
+            Text(
+                text = "Connection Rejected by $devIP",
+                color = MaterialTheme.colorScheme.onErrorContainer,
+                style = MaterialTheme.typography.labelMedium
+            )
         }
     }
 

@@ -114,18 +114,30 @@ fun ServiceItem(
     var controllerScreenData by remember {
         mutableStateOf("")
     }
+    var navigateToPairingPage by remember {
+        mutableStateOf(false)
+    }
     // check if device info is available then naviagte to control screen
     if ( controllerScreenData.length>0){
         try {
-            Json.decodeFromString<ArlinPairedDeviceInfo>(controllerScreenData)
-            routeProps.navHostController.navigate("control/${controllerScreenData}")
+            val controllerScreenData_ = Json.decodeFromString<ArlinPairedDeviceInfo>(controllerScreenData)
+            controllerScreenData = ""
+            connectionViewModel.close()
+            routeProps.navHostController.navigate(controllerScreenData_)
         }
         catch(e:Exception) {
             e.printStackTrace()
             controllerScreenData = ""
         }
     }
-    val serializedService = Json.encodeToString(ArlinServiceInfo.serializer(), service)
+
+    // check if navigation to pairing page is triggered
+    if (navigateToPairingPage){
+        routeProps.navHostController.navigate(service)
+        navigateToPairingPage = false
+    }
+
+
     fun handleDeviceConnection(){
         // first connect to the device
         connectionViewModel.connect("ws://${service.hostAddress}:${service.port}/ws")
@@ -142,7 +154,7 @@ fun ServiceItem(
                     }
                 }
             }else {
-                routeProps.navHostController.navigate("/pair_dev/${serializedService}")
+                navigateToPairingPage = true
             }
         }
     }
@@ -154,7 +166,7 @@ fun ServiceItem(
         .clip(RoundedCornerShape(25.dp))
         .background(background)
         .clickable(clickable, onClick = {
-
+            handleDeviceConnection()
         })
 
     ){

@@ -23,3 +23,9 @@ fun generateRandomDeviceID(length: Int = 10): String {
         .map { chars[Random.nextInt(chars.length)] }
         .joinToString("")
 }
+
+fun calculateCursorMovement(dx: Float, dy: Float, sensitivity: Float = 1.0f): Pair<Int, Int> {
+    val scaledDx = (dx * sensitivity).toInt()
+    val scaledDy = (dy * sensitivity).toInt()
+    return Pair(scaledDx, scaledDy)
+}
