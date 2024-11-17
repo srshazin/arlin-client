@@ -52,24 +52,26 @@ fun ControlScreen(routeProps: RouteProps, deviceInfo: ArlinPairedDeviceInfo?) {
                             )
                         }
                     },
-                    actions = {
-                        IconButton(
-                            onClick = { /*TODO*/ },
-                            colors = IconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer.copy(0.5f),
-                                contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                disabledContainerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.38f),
-                                disabledContentColor = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.38f)
-                            )
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.disconnect),
-                                contentDescription = "Disconnect icon",
-//                                tint = MaterialTheme.colorScheme.onErrorContainer
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
+//                    actions = {
+//                        IconButton(
+//                            onClick = {
+//                                      routeProps.navHostController.popBackStack()
+//                            },
+//                            colors = IconButtonColors(
+//                                containerColor = MaterialTheme.colorScheme.errorContainer.copy(0.5f),
+//                                contentColor = MaterialTheme.colorScheme.onErrorContainer,
+//                                disabledContainerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.38f),
+//                                disabledContentColor = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.38f)
+//                            )
+//                        ) {
+//                            Icon(
+//                                imageVector = ImageVector.vectorResource(id = R.drawable.disconnect),
+//                                contentDescription = "Disconnect icon",
+////                                tint = MaterialTheme.colorScheme.onErrorContainer
+//                            )
+//                        }
+//                        Spacer(modifier = Modifier.width(10.dp))
+//                    }
                 )
             }
         ) { paddingValues ->
