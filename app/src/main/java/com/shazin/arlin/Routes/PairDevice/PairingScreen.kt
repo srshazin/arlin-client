@@ -92,10 +92,9 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
     if (pairingDeviceInfo.value != null) {
         val pairDevTmp = pairingDeviceInfo.value
         pairingDeviceInfo.value = null
-        if (pairingDeviceInfo.value == null) {
-            Log.d("DDD", "I am executed")
-            routeProps.navHostController.navigate(pairDevTmp!!)
-        }
+        Log.d("DDD", "I am executed")
+        routeProps.navHostController.navigate(pairDevTmp!!)
+
     }
 
     Scaffold(
