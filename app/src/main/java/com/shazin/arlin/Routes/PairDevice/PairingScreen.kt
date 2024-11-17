@@ -90,7 +90,8 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
     }
     // check if device info is available then naviagte to control screen
     if (pairingDeviceInfo.value != null) {
-        routeProps.navHostController.navigate(pairingDeviceInfo)
+        routeProps.navHostController.navigate(pairingDeviceInfo.value!!)
+        pairingDeviceInfo.value = null
     }
 
     Scaffold(
