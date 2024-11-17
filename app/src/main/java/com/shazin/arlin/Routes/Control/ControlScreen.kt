@@ -2,13 +2,16 @@ package com.shazin.arlin.Routes.Control
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WifiTetheringError
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shazin.arlin.Models.ArlinPairedDeviceInfo
 import com.shazin.arlin.Models.RouteProps
@@ -51,14 +55,20 @@ fun ControlScreen(routeProps: RouteProps, deviceInfo: ArlinPairedDeviceInfo?) {
                     actions = {
                         IconButton(
                             onClick = { /*TODO*/ },
-                            modifier = Modifier.background(MaterialTheme.colorScheme.errorContainer)
+                            colors = IconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer.copy(0.5f),
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                                disabledContainerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.38f),
+                                disabledContentColor = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.38f)
+                            )
                         ) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.disconnect),
                                 contentDescription = "Disconnect icon",
-                                tint = MaterialTheme.colorScheme.onErrorContainer
+//                                tint = MaterialTheme.colorScheme.onErrorContainer
                             )
                         }
+                        Spacer(modifier = Modifier.width(10.dp))
                     }
                 )
             }
