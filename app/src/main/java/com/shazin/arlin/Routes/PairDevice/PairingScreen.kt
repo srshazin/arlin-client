@@ -89,15 +89,17 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
         handlePairing()
     }
     // check if device info is available then naviagte to control screen
-    LaunchedEffect(pairingDeviceInfo) {
+
         if (pairingDeviceInfo != null) {
             val pairDevTmp = pairingDeviceInfo
             pairingDeviceInfo = null
             Log.d("DDD", "I am executed")
-            routeProps.navHostController.navigate(pairDevTmp!!)
+            routeProps.navHostController.navigate(pairDevTmp!!){
+                launchSingleTop = true
+            }
 
         }
-    }
+
 
     Scaffold(
         topBar = {
