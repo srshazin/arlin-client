@@ -66,7 +66,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
         Brand = Build.BRAND,
         DeviceID = appStateHandler.getDeviceID()
     )
-    val pairingDeviceInfo = remember {
+    var pairingDeviceInfo by remember {
         mutableStateOf<ArlinPairedDeviceInfo?>(null)
     }
     val serializedPairingData = Json.encodeToString(PairingData.serializer(), pairingData)
@@ -78,7 +78,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                 val pairingDeviceInfo_ =
                     Json.decodeFromString<ArlinPairedDeviceInfo>(pairingDeviceInq)
                 appStateHandler.addPairedDevice(pairingDeviceInfo_)
-                pairingDeviceInfo.value = pairingDeviceInfo_
+                pairingDeviceInfo = pairingDeviceInfo_
             } catch (e: Exception) {
                 connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
                 e.printStackTrace()
@@ -90,10 +90,9 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
     }
     // check if device info is available then naviagte to control screen
     LaunchedEffect(pairingDeviceInfo) {
-        if (pairingDeviceInfo.value != null) {
-            val pairDevTmp = pairingDeviceInfo.value
-            pairingDeviceInfo.value = null
-            Log.d("DDD", "I am executed")
+        if (pairingDeviceInfo != null) {
+            val pairDevTmp = pairingDeviceInfo
+            pairingDeviceInfo = null
             routeProps.navHostController.navigate(pairDevTmp!!)
 
         }
