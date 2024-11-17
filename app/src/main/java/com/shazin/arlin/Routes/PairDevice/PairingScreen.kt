@@ -54,6 +54,10 @@ import com.shazin.arlin.Models.RouteProps
 import com.shazin.arlin.R
 import com.shazin.arlin.ViewModels.ConnectionViewModel
 import com.shazin.arlin.ViewModels.PairingRequestState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 
@@ -79,7 +83,11 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                     Json.decodeFromString<ArlinPairedDeviceInfo>(pairingDeviceInq)
                 appStateHandler.addPairedDevice(pairingDeviceInfo_)
 //                pairingDeviceInfo = pairingDeviceInfo_
-                routeProps.navHostController.navigate(pairingDeviceInfo_)
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main){
+                        routeProps.navHostController.navigate(pairingDeviceInfo_)
+                    }
+                }
             } catch (e: Exception) {
                 connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
                 e.printStackTrace()
