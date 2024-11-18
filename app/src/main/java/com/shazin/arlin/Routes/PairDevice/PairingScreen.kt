@@ -165,38 +165,57 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                         }
                     }
                 }
-//                AnimatedVisibility(visible = true){
-                Box(modifier = Modifier
+                AnimatedVisibility(visible = pairingDeviceInfo != null) {
+                    Column {
+                        Box(
+                            modifier = Modifier
 
-                    .padding(18.dp, 20.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(25.dp))
+                                .padding(18.dp, 20.dp)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(25.dp))
 
-                    .background(
-                        MaterialTheme.colorScheme.surfaceVariant.copy(0.5f)
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 15.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.plugs_connected),
-                            contentDescription = "",
-                            tint = MaterialTheme.colorScheme.surfaceTint,
-                            modifier = Modifier.size(40.dp)
-                        )
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = "Paired Successfully",
-                            color = MaterialTheme.colorScheme.surfaceTint,
-                            modifier = Modifier.padding(bottom = 15.dp)
-                        )
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(0.5f)
+                                )
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 15.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.plugs_connected),
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colorScheme.surfaceTint,
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Text(
+                                    text = "Paired Successfully",
+                                    color = MaterialTheme.colorScheme.surfaceTint,
+                                    modifier = Modifier.padding(bottom = 15.dp)
+                                )
+                            }
+                            Button(
+                                modifier = Modifier
+                                    .padding(18.dp, 0.dp)
+                                    .fillMaxWidth(),
+                                onClick = {
+                                    routeProps.navHostController.navigate(pairingDeviceInfo!!)
+                                }) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+
+                                    Text(text = "Go to Control")
+                                }
+                            }
+
+                        }
                     }
+
                 }
-//                }
             } else {
                 Text(text = "Invalid service")
             }
