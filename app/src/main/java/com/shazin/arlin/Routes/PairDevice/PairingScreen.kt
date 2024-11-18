@@ -164,7 +164,11 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                     }
                 }
                 AnimatedVisibility(visible = true){
-                    
+                    Row(
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(imageVector = ImageVector.vectorResource(id = R.drawable.plugs_connected), contentDescription = )
+                    }
                 }
             } else {
                 Text(text = "Invalid service")
