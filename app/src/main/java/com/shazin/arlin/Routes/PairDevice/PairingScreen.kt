@@ -166,17 +166,35 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                     }
                 }
 //                AnimatedVisibility(visible = true){
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.plugs_connected),
-                        contentDescription = "",
-                        modifier = Modifier.size(40.dp)
+                Box(modifier = Modifier
+
+                    .padding(18.dp, 20.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(25.dp))
+
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant.copy(0.5f)
                     )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.plugs_connected),
+                            contentDescription = "",
+                            tint = MaterialTheme.colorScheme.surfaceTint,
+                            modifier = Modifier.size(40.dp)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = "Paired Successfully",
+                            color = MaterialTheme.colorScheme.surfaceTint,
+                            modifier = Modifier.padding(bottom = 15.dp)
+                        )
+                    }
                 }
 //                }
             } else {
