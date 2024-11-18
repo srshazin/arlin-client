@@ -93,12 +93,12 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
         handlePairing()
     }
 //     check if device info is available then navigate to control screen
-    if (pairingDeviceInfo != null) {
-        Log.d("DDD", "I am executed")
-        routeProps.navHostController.navigate(pairingDeviceInfo!!)
-        pairingDeviceInfo = null
-
-    }
+//    if (pairingDeviceInfo != null) {
+//        Log.d("DDD", "I am executed")
+//        routeProps.navHostController.navigate(pairingDeviceInfo!!)
+//        pairingDeviceInfo = null
+//
+//    }
 
 
     Scaffold(
@@ -160,6 +160,11 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = "Pair")
                         }
+                    }
+                }
+                if (pairingDeviceInfo != null){
+                    Button(onClick = {routeProps.navHostController.navigate(pairingDeviceInfo!!)}) {
+                        Text(text = "Go to controller")
                     }
                 }
             } else {
