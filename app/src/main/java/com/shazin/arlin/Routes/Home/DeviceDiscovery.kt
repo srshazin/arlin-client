@@ -118,7 +118,7 @@ fun ServiceItem(
         mutableStateOf(false)
     }
     // check if device info is available then naviagte to control screen
-    if ( controllerScreenData.length>0){
+    if (controllerScreenData.length>0){
         try {
             val controllerScreenData_ = Json.decodeFromString<ArlinPairedDeviceInfo>(controllerScreenData)
             controllerScreenData = ""
