@@ -82,12 +82,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                 val pairingDeviceInfo_ =
                     Json.decodeFromString<ArlinPairedDeviceInfo>(pairingDeviceInq)
                 appStateHandler.addPairedDevice(pairingDeviceInfo_)
-//                pairingDeviceInfo = pairingDeviceInfo_
-                CoroutineScope(Dispatchers.IO).launch {
-                    withContext(Dispatchers.Main){
-                        routeProps.navHostController.navigate(pairingDeviceInfo_)
-                    }
-                }
+                pairingDeviceInfo = pairingDeviceInfo_
             } catch (e: Exception) {
                 connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
                 e.printStackTrace()
@@ -97,13 +92,13 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
     if (connectionViewModel.pairingStatus.value == PairingRequestState.ACCEPTED) {
         handlePairing()
     }
-    // check if device info is available then naviagte to control screen
-//    if (pairingDeviceInfo != null) {
-//        Log.d("DDD", "I am executed")
-//        routeProps.navHostController.navigate(pairingDeviceInfo!!)
-//        pairingDeviceInfo = null
-//
-//    }
+     check if device info is available then navigate to control screen
+    if (pairingDeviceInfo != null) {
+        Log.d("DDD", "I am executed")
+        routeProps.navHostController.navigate(pairingDeviceInfo!!)
+        pairingDeviceInfo = null
+
+    }
 
 
     Scaffold(
