@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 
@@ -38,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -163,13 +165,20 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                         }
                     }
                 }
-                AnimatedVisibility(visible = true){
-                    Row(
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(imageVector = ImageVector.vectorResource(id = R.drawable.plugs_connected), contentDescription = )
-                    }
+//                AnimatedVisibility(visible = true){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.plugs_connected),
+                        contentDescription = "",
+                        modifier = Modifier.size(40.dp)
+                    )
                 }
+//                }
             } else {
                 Text(text = "Invalid service")
             }
