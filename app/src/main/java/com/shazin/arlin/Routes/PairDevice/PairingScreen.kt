@@ -197,21 +197,22 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                                     modifier = Modifier.padding(bottom = 15.dp)
                                 )
                             }
-                            Button(
-                                modifier = Modifier
-                                    .padding(18.dp, 0.dp)
-                                    .fillMaxWidth(),
-                                onClick = {
-                                    routeProps.navHostController.navigate(pairingDeviceInfo!!)
-                                }) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
 
-                                    Text(text = "Go to Control")
-                                }
+
+                        }
+                        Button(
+                            modifier = Modifier
+                                .padding(18.dp, 0.dp)
+                                .fillMaxWidth(),
+                            onClick = {
+                                routeProps.navHostController.navigate(pairingDeviceInfo!!)
+                            }) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Text(text = "Go to Control")
                             }
-
                         }
                     }
 
