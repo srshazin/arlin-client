@@ -205,6 +205,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                                 .padding(18.dp, 0.dp)
                                 .fillMaxWidth(),
                             onClick = {
+                                pairingDeviceInfo?.justPaired = true
                                 routeProps.navHostController.navigate(pairingDeviceInfo!!)
                             }) {
                             Row(

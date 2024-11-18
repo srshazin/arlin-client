@@ -23,6 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shazin.arlin.Models.ArlinPairedDeviceInfo
+import com.shazin.arlin.Models.ArlinServiceInfo
 import com.shazin.arlin.Models.RouteProps
 import com.shazin.arlin.R
 import com.shazin.arlin.Routes.Home.HomeScreen
@@ -43,7 +44,9 @@ fun ControlScreen(routeProps: RouteProps, deviceInfo: ArlinPairedDeviceInfo?) {
                     title = { Text(text = deviceInfo.hostName) },
                     navigationIcon = {
                         IconButton(onClick = {
-//                            routeProps.navHostController.popBackStack()
+                            if (deviceInfo.justPaired){
+                                routeProps.navHostController.clearBackStack<ArlinServiceInfo>()
+                            }
                             routeProps.navHostController.popBackStack()
                         }) {
                             Icon(
