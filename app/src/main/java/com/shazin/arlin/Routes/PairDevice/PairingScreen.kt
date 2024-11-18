@@ -83,6 +83,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                     Json.decodeFromString<ArlinPairedDeviceInfo>(pairingDeviceInq)
                 appStateHandler.addPairedDevice(pairingDeviceInfo_)
                 pairingDeviceInfo = pairingDeviceInfo_
+                connectionViewModel.pairingStatus.value = PairingRequestState.ACCEPTED
             } catch (e: Exception) {
                 connectionViewModel.pairingStatus.value = PairingRequestState.REJECTED
                 e.printStackTrace()
@@ -137,7 +138,7 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                     PairInProgressIndicator()
                 }
                 AnimatedVisibility(
-                    visible = !connectionViewModel.isPairing.value
+                    visible = !connectionViewModel.isPairing.value && connectionViewModel.pairingStatus.value == PairingRequestState.UNSET
                 ) {
                     Button(
                         modifier = Modifier
@@ -162,10 +163,8 @@ fun DeviceParingScreen(routeProps: RouteProps, service: ArlinServiceInfo?) {
                         }
                     }
                 }
-                if (pairingDeviceInfo != null){
-                    Button(onClick = {routeProps.navHostController.navigate(pairingDeviceInfo!!)}) {
-                        Text(text = "Go to controller")
-                    }
+                AnimatedVisibility(visible = true){
+                    
                 }
             } else {
                 Text(text = "Invalid service")
