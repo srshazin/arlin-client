@@ -6,6 +6,7 @@ import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresExtension
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.shazin.arlin.Models.ArlinServiceInfo
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(application) {
     private val nsdManager = application.getSystemService(Context.NSD_SERVICE) as NsdManager
-    private val serviceType = "_arlin._tcp" // Adjust to your service type
+    private val serviceType = "_arlin._tcp"
     private val _services = MutableStateFlow<List<ArlinServiceInfo>>(emptyList())
     val services: StateFlow<List<ArlinServiceInfo>> = _services
     private var discoveryJob: Job? = null
@@ -33,6 +34,7 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
     private fun startServiceDiscovery() {
         discoveryJob = viewModelScope.launch{
             while (isActive) {
+                Log.d("XXX", "Discovery started")
                 discoverServices()
                 delay(1_000) // Restart discovery every 10 seconds to capture new services
             }
@@ -45,14 +47,17 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
                     // Discovery started
                 }
 
+                @RequiresExtension(extension = Build.VERSION_CODES.TIRAMISU, version = 7)
                 override fun onServiceFound(serviceInfo: NsdServiceInfo) {
                     // Resolve found services
+                    Log.d("XXX", "HoADDR ${serviceInfo.port}")
                     resolveService(serviceInfo)
+
 
                 }
 
                 override fun onServiceLost(serviceInfo: NsdServiceInfo) {
-//                Log.d("XXX", "Service ${serviceInfo} is lost")
+                Log.d("XXX", "Service ${serviceInfo} is lost")
                     _services.value = _services.value.filter {
                         it.hostAddress != decodeBase64EncodedIpAddress(serviceInfo.serviceName)
                     }
@@ -77,10 +82,11 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
     }
     private fun resolveService(serviceInfo: NsdServiceInfo) {
         nsdManager.resolveService(serviceInfo, object : NsdManager.ResolveListener {
+            @RequiresExtension(extension = Build.VERSION_CODES.TIRAMISU, version = 7)
             override fun onServiceResolved(resolvedServiceInfo: NsdServiceInfo) {
-                val hostName = parseByteArrayToString(resolvedServiceInfo.attributes.get("host"))
-                val hostAddress = decodeBase64EncodedIpAddress(resolvedServiceInfo.serviceName)
-                Log.d("XXX", "Service found : ${serviceInfo}")
+                val hostName = resolvedServiceInfo.attributes.get("host")?.decodeToString()
+                val hostAddress = resolvedServiceInfo.hostAddresses[0].hostAddress
+
                 val service = ArlinServiceInfo(
                     hostName = if (hostName.isNullOrEmpty()) "Unknown Device" else hostName,
                     hostAddress = hostAddress,
@@ -90,6 +96,7 @@ class ServiceDiscoveryViewModel(application: Application):AndroidViewModel(appli
                 if (_services.value.filter { it.hostAddress == hostAddress }.size == 0){
                     _services.value = _services.value + service
                 }
+
 
             }
 
