@@ -73,7 +73,6 @@ fun ServiceItem(
 
     val serializedService = Json.encodeToString(ArlinServiceInfo.serializer(), service)
     Box(modifier = Modifier
-
         .padding(18.dp, 20.dp)
         .fillMaxWidth()
         .clip(RoundedCornerShape(25.dp))
